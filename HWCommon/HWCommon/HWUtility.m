@@ -262,4 +262,41 @@
         return vc;
     }
 }
++ (BOOL)isSameDay:(long)iTime1 Time2:(long)iTime2
+{
+    //传入时间毫秒数
+    NSDate *pDate1 = [NSDate dateWithTimeIntervalSince1970:iTime1/1000];
+    NSDate *pDate2 = [NSDate dateWithTimeIntervalSince1970:iTime2/1000];
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth |  NSCalendarUnitDay;
+    NSDateComponents* comp1 = [calendar components:unitFlags fromDate:pDate1];
+    NSDateComponents* comp2 = [calendar components:unitFlags fromDate:pDate2];
+    
+    return [comp1 day]   == [comp2 day] &&
+    [comp1 month] == [comp2 month] &&
+    [comp1 year]  == [comp2 year];
+}
++ (int)getRandomNumber:(int)from to:(int)to
+{
+    return (int)(from + (arc4random() % (to - from + 1)));
+}
++ (float) randomBetween:(float)smallerNumber And:(float)largerNumber
+{
+    //设置精确的位数
+    int precision = 100;
+    //先取得他们之间的差值
+    float subtraction = largerNumber - smallerNumber;
+    //取绝对值
+    subtraction = ABS(subtraction);
+    //乘以精度的位数
+    subtraction *= precision;
+    //在差值间随机
+    float randomNumber = arc4random() % ((int)subtraction+1);
+    //随机的结果除以精度的位数
+    randomNumber /= precision;
+    //将随机的值加到较小的值上
+    float result = MIN(smallerNumber, largerNumber) + randomNumber;
+    //返回结果
+    return result;
+}
 @end

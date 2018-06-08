@@ -142,4 +142,10 @@
  *  @return 当前视图控制器
  */
 + (UIViewController *)currentViewController;
+#pragma mark - 判断是否为同一天
++ (BOOL)isSameDay:(long)iTime1 Time2:(long)iTime2;
+#pragma mark - 产生一个随机数
++ (int)getRandomNumber:(int)from to:(int)to;
+#pragma mark - 产生一个随机的浮点数
++ (float) randomBetween:(float)smallerNumber And:(float)largerNumber;
 @end
