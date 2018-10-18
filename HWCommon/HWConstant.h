@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "HWUtility.h"
-#define SzScreenSize              [UIApplication sharedApplication].keyWindow.rootViewController.view.bounds.size
-#define SzScreenScale              [UIScreen mainScreen].scale
-#define SzTrasformScale(a)         (a * [HWUtility getScreenPer])
+#define HWScreenSize              [UIApplication sharedApplication].keyWindow.rootViewController.view.bounds.size
+#define HWScreenScale              [UIScreen mainScreen].scale
+#define HWTrasformScale(a)         (a * [HWUtility getScreenPer])
 
 // 16进制颜色值直接转化为color
 #define UIColorFromHex(hexValue) [UIColor colorWithRed:((float)((hexValue & 0xFF0000) >> 16))/255.0 green:((float)((hexValue & 0xFF00) >> 8))/255.0 blue:((float)(hexValue & 0xFF))/255.0 alpha:1.0]
@@ -21,5 +21,5 @@
 // RGB same value
 #define UIColorFromRGBSameValue(v)   UIColorFromRGB(v, v, v)
 
-typedef void (^HWSuccessCallBack)(NSString *returnValue);
+typedef void (^HWSuccessCallBack)(NSData *data);
 typedef void (^HWFailureCallBack)(NSError *error);

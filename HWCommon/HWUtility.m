@@ -50,13 +50,13 @@
     if (iOSVersionGreaterThan(@"8")) {
         UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
         if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) {
-            per = SzScreenSize.height / 667.0;
+            per = HWScreenSize.height / 667.0;
             
         } else if ((orientation == UIInterfaceOrientationLandscapeLeft) ||
                    (orientation == UIInterfaceOrientationLandscapeRight)) {
-            per = SzScreenSize.width / 667.0;
+            per = HWScreenSize.width / 667.0;
         }
-        if (SzScreenSize.height == 812.0 || SzScreenSize.width == 812) {
+        if (HWScreenSize.height == 812.0 || HWScreenSize.width == 812) {
             per = 1.0;
         }
     }
@@ -118,7 +118,13 @@
     NSData *sourceData = [self dataFromDic:dic];
     return [self base64EncodingWithData:sourceData];
 }
-
++ (NSString *)base64EncodingWithStr:(NSString *)sourceStr
+{
+    NSData *data = [sourceStr dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *base64Data = [data base64EncodedDataWithOptions:0];
+    NSString *baseString = [[NSString alloc]initWithData:base64Data encoding:NSUTF8StringEncoding];
+    return baseString;
+}
 + (NSString *)base64EncodingWithData:(NSData *)sourceData {
     if (!sourceData) {
         //如果sourceData则返回nil，不进行加密。
@@ -298,5 +304,24 @@
     float result = MIN(smallerNumber, largerNumber) + randomNumber;
     //返回结果
     return result;
+}
+#pragma mark - 加载图片、资源
++ (NSString *)getResourcePath:(NSString *)subPath bundle:(NSString *)bundle {
+    
+    NSString *fullPath;
+    NSString *path = [[NSBundle mainBundle] pathForResource:bundle ofType:@"bundle"];
+    if (path) {
+        fullPath = [NSString stringWithFormat:@"%@/%@", path, subPath];
+    }
+    
+    return fullPath;
+}
+#pragma mark - 获取图片
++ (UIImage *)getImageFromPath:(NSString *)subPath bundle:(NSString*)bundle {
+    
+    UIImage *image = nil;
+    NSString *path = [self getResourcePath:subPath bundle:bundle];
+    image          = [UIImage imageWithContentsOfFile:path];
+    return image;
 }
 @end

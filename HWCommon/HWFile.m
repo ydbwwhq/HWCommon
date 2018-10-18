@@ -10,12 +10,16 @@
 
 @implementation HWFile
 + (BOOL)fileExistsAtPath:(NSString *)filePath {
+    NSString *documentPath = [self getDocumentPath];
+    filePath = [documentPath stringByAppendingPathComponent:filePath];
     NSFileManager* fileManager=[NSFileManager defaultManager];
     return [fileManager fileExistsAtPath:filePath];
 }
 + (BOOL)writeFile:(NSString *)content filePath:(NSString *)filePath append:(BOOL)isAppend {
     BOOL success = false;
     NSFileManager *fileManager=[NSFileManager defaultManager];
+    NSString *documentPath = [self getDocumentPath];
+    filePath = [documentPath stringByAppendingPathComponent:filePath];
     if([fileManager fileExistsAtPath:filePath]) {
         NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:filePath];
         if(isAppend) {
@@ -45,6 +49,8 @@
 + (NSData*)readFile:(NSString *)filePath {
     NSData *data;
     NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *documentPath = [self getDocumentPath];
+    filePath = [documentPath stringByAppendingPathComponent:filePath];
     if([fileManager fileExistsAtPath:filePath])
     {
         NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:filePath];
@@ -52,24 +58,44 @@
     }
     return data;
 }
-+ (float) fileSizeAtPath:(NSString*) filePath {
-    NSFileManager* manager = [NSFileManager defaultManager];
-    if ([manager fileExistsAtPath:filePath]){
-        return [[manager attributesOfItemAtPath:filePath error:nil] fileSize]/(1024*1024.0);
-    }
-    return 0;
+
++ (NSObject *)readObjFromFile:(NSString *)filePath
+{
+    filePath = [[self getDocumentPath] stringByAppendingPathComponent:filePath];
+    return [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
 }
-+ (float )folderSizeAtPath:(NSString*) folderPath {
-    NSFileManager* manager = [NSFileManager defaultManager];
-    if (![manager fileExistsAtPath:folderPath])
-        return 0;
-    NSEnumerator *childFilesEnumerator = [[manager subpathsAtPath:folderPath] objectEnumerator];//从前向后枚举器／／／／//
-    NSString* fileName;
-    long long folderSize = 0;
-    while ((fileName = [childFilesEnumerator nextObject]) != nil){
-        NSString* fileAbsolutePath = [folderPath stringByAppendingPathComponent:fileName];
-        folderSize += [self fileSizeAtPath:fileAbsolutePath];
++ (Boolean)writeObjTofile:(NSObject *)obj filePath:(NSString *)filePath
+{
+    Boolean success = false;
+    NSString *documentPath = [self getDocumentPath];
+    filePath = [documentPath stringByAppendingPathComponent:filePath];
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    if([fileManager fileExistsAtPath:filePath])
+    {
+        success = [NSKeyedArchiver archiveRootObject:obj toFile:filePath];
+    }else
+    {
+        NSString *folderPath =[filePath stringByDeletingLastPathComponent];
+        if (![fileManager fileExistsAtPath:folderPath])
+        {
+            NSError *error;
+            [[NSFileManager defaultManager] createDirectoryAtPath:folderPath withIntermediateDirectories:YES attributes:nil error:&error];
+            if(error)
+            {
+                success = false;
+            }else
+            {
+                success = [NSKeyedArchiver archiveRootObject:obj toFile:filePath];
+            }
+        }else
+        {
+            success = [NSKeyedArchiver archiveRootObject:obj toFile:filePath];
+        }
     }
-    return folderSize;
+    return success;
+}
++ (NSString*)getDocumentPath
+{
+    return NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES)[0];
 }
 @end

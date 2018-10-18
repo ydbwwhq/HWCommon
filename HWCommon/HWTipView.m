@@ -44,7 +44,7 @@ UIColor *hwBgColor;
             self.layer.cornerRadius = hwCornerRadius;
         }else
         {
-            self.layer.cornerRadius  = SzTrasformScale(4.0);
+            self.layer.cornerRadius  = HWTrasformScale(4.0);
         }
         
         if(hwFont != nil)
@@ -84,12 +84,12 @@ UIColor *hwBgColor;
     
     HWTipView *tipView = [self getInstance];
     
-    CGSize size = [tip boundingRectWithSize:CGSizeMake(SzScreenSize.width / 2.0, SzScreenSize.height / 2.0) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName: tipView.font} context:nil].size;
-    float w = size.width + SzTrasformScale(40);
-    float h = size.height + SzTrasformScale(20);
+    CGSize size = [tip boundingRectWithSize:CGSizeMake(HWScreenSize.width / 2.0, HWScreenSize.height / 2.0) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName: tipView.font} context:nil].size;
+    float w = size.width + HWTrasformScale(40);
+    float h = size.height + HWTrasformScale(20);
     
     CGRect labelRec =
-    CGRectMake((SzScreenSize.width - w) / 2.0, SzScreenSize.height/2.0 - SzTrasformScale(105), w, h);
+    CGRectMake((HWScreenSize.width - w) / 2.0, HWScreenSize.height  - HWTrasformScale(158), w, h);
     tipView.frame = labelRec;
     tipView.alpha = 0.5;
     tipView.text  = tip;

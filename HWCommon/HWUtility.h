@@ -88,6 +88,14 @@
  @return 返回base64字符串
  */
 + (NSString *)base64EncodingWithData:(NSData *)sourceData;
+#pragma mark - base64加密 入参为字符串
+/**
+ base64编码
+ 
+ @param sourceStr 源Str
+ @return 返回base64字符串
+ */
++ (NSString *)base64EncodingWithStr:(NSString *)sourceStr;
 #pragma mark - MD5加密
 /**
  *  返回字符串对应的MD5值
@@ -148,4 +156,8 @@
 + (int)getRandomNumber:(int)from to:(int)to;
 #pragma mark - 产生一个随机的浮点数
 + (float) randomBetween:(float)smallerNumber And:(float)largerNumber;
+#pragma mark  获取图片
++ (UIImage *)getImageFromPath:(NSString *)subPath bundle:(NSString*)bundle;
+#pragma mark - bundle中图片、资源的地址
++ (NSString *)getResourcePath:(NSString *)subPath bundle:(NSString *)bundle;
 @end
